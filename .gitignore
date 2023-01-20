@@ -1,0 +1,14 @@
+__pycache__
+*__pycache__
+*temp.*
+temp.*
+*.log*
+*.zip
+venv
+.env
+debug.*
+settings.py
+db.*
+*.sqlite3
+*.pyc
+data.json
