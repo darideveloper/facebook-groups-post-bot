@@ -21,18 +21,18 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/darideveloper/europeanstartups_scraper">
+  <a href="https://github.com/darideveloper/facebook-groups-post-bot">
     <img src="imgs/logo.gif" alt="Logo" width="200" height="160">
   </a>
 
 <h3 align="center">Facebook Groups Post Bot</h3>
 
   <p align="center">
-    Python scraper for extract data from the page <a href="https://app.europeanstartups.co/companies.startups/f/data_type/anyof_Verified/regions/allof_European%20Union">https://app.europeanstartups.co/companies.startups/f/data_type/anyof_Verified/regions/allof_European%20Union</a>, using python, and a google chrome data with a premium account already logged.
+    Python bot for create text posts in facebook groups where you already are a member.
     <br />
-    <a href="https://github.com/darideveloper/europeanstartups_scraper/issues">Report Bug</a>
+    <a href="https://github.com/darideveloper/facebook-groups-post-bot/issues">Report Bug</a>
     ·
-    <a href="https://github.com/darideveloper/europeanstartups_scraper/issues">Request Feature</a>
+    <a href="https://github.com/darideveloper/facebook-groups-post-bot/issues">Request Feature</a>
   </p>
 </div>
 
@@ -68,35 +68,13 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Web page Screenshot][product-screenshot]](webpage)
+This project have two scripts: __ save_groups.py __ and __ post_groups.py __.
 
-The project extract all results from the page [https://app.europeanstartups.co/companies.startups/f/data_type/anyof_Verified/regions/allof_European%20Union](https://app.europeanstartups.co/companies.startups/f/data_type/anyof_Verified/regions/allof_European%20Union), and save the output data in a csv file.
+The __ save_groups.py __ script is used to save the groups where you are a member in the data.json, searching them with specific keyword. This script is useful if you want to post in a lot of groups, because you can save the groups in the json file and use it in the __ post_groups.py __ script.
 
-The project is a python script, that use a google chrome data with a premium account already logged, to extract the data from the page.
+The __ post_groups.py __ script is used to post in spcific groups. In the data.json file you can save the groups where you want to post, and the script will post in all of them.
 
-The data extract is:
-
-* NAME
-* DEALROOM SIGNAL
-* MARKET
-* TYPE
-* LAUNCH DATE
-* VALUATION
-* FUNDING
-* LOCATION
-* LAST ROUND
-* REVENUE
-* STATUS
-* GROWTH STAGE
-* EMPLOYEES
-* OWNERSHIP
-* MARKET CAP
-* DEBT
-* URL WEBSITE
-* LINKEDIN PROFILE
-* TWITTER PROFILE
-* FIRM VALUATION
-* TAGS
+Warning: *This script is not for spamming groups, is for post in groups where you are a member, and you want to post in a lot of groups at the same time. I am not responsible for the use that you give to this script.*
 
 ### Built With
 
@@ -124,13 +102,14 @@ To get a local copy up and running follow these simple example steps.
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/darideveloper/europeanstartups_scraper.git
+   git clone https://github.com/darideveloper/facebook-groups-post-bot.git
    ```
 2. Install python packages (opening a terminal in the project folder)
    ```sh
    python -m pip install -r requirements.txt 
    ```
-3. Update your chrome path in the `.env` file (note: the chrome path is the folder where chrome data its installed)
+3. Create a `.env` file and `data.json` file in the project folder.
+4. Update your chrome path in the `.env` file (note: the chrome path is the folder where chrome data its installed)
    ```js
    CHROME_PATH = C:\Users\<<your-user-name>>\AppData\Local\Google\Chrome\User Data
    ```
@@ -139,24 +118,49 @@ To get a local copy up and running follow these simple example steps.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-1. Go to https://app.europeanstartups.co/companies.startups/f/data_type/anyof_Verified/regions/allof_European%20Union and create an account (if you have problems with your email, try with a [proton email](https://proton.me/es/mail))
-2. Activate the premium trial or buy a premium account
-3. be sure to keep the account logged in the browser.
-4. Open a terminal in the project folder
-5. Run the project folder with python: 
-    ```sh
-    python .
+1. Before run the scripts, you need to login in your facebook account in chrome
+2. (optional) Open the __ save_groups.py __ script with a code/text editor, and replace the "keyword" for search groups in the line 3
+    ```python
+    keyword = "python" # sample for search group where you are a member, about python
     ```
-6. Wait until the script finish, and check the `output.csv` file in the project folder (note: while the script its running, you can't use google chrome).
+3. (optional) Run the __ save_groups.py __ script
+    ```sh
+    python save_groups.py
+    ```
+4. Open the "data.json" file, and add the groups where you want to post, and the text of the post in the "text" field
+    ```json
+    {
+        "posts": [
+            "This is a sample post 1",
+            "This is a sample post 2",
+        ],
+        "groups": [
+            "https://www.facebook.com/groups/sample-group-1/",
+            "https://www.facebook.com/groups/sample-group-2/",
+            "https://www.facebook.com/groups/sample-group-3/",
+            "https://www.facebook.com/groups/sample-group-4/",
+            "https://www.facebook.com/groups/sample-group-5/",
+            "https://www.facebook.com/groups/sample-group-6/",
+            "https://www.facebook.com/groups/sample-group-7/",
+            "https://www.facebook.com/groups/sample-group-8/"
+        ]
+    }
+    ```
+5. Run the __ post_groups.py __ script
+    ```sh
+    python __post_groups__.py
+    ```
+6. Wait until the script finish, and enjoy your posts in the groups :)
+
 
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Use chrome data fro avoid login in the page
-- [x] Extract all data from the page
-- [x] Save output data in csv file 
+- [x] Get all groups where you are a member related to a keyword
+- [x] Create text post in groups
+- [x] Select a random background color for each post
 
-See the [open issues](https://github.com/darideveloper/europeanstartups_scraper/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/darideveloper/facebook-groups-post-bot/issues) for a full list of proposed features (and known issues).
 
 
 <!-- CONTRIBUTING -->
@@ -187,21 +191,21 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Darideveloper - [@developerdari](https://twitter.com/developerdari) - darideveloper@gmail.com.com
 
-Project Link: [https://github.com/darideveloper/europeanstartups_scraper](https://github.com/darideveloper/europeanstartups_scraper)
+Project Link: [https://github.com/darideveloper/facebook-groups-post-bot](https://github.com/darideveloper/facebook-groups-post-bot)
 
 
 <!-- MARKDOWN LINKS & imgs -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/darideveloper/europeanstartups_scraper.svg?style=for-the-badge
-[contributors-url]: https://github.com/darideveloper/europeanstartups_scraper/graphs/contributors
+[contributors-url]: https://github.com/darideveloper/facebook-groups-post-bot/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/darideveloper/europeanstartups_scraper.svg?style=for-the-badge
-[forks-url]: https://github.com/darideveloper/europeanstartups_scraper/network/members
+[forks-url]: https://github.com/darideveloper/facebook-groups-post-bot/network/members
 [stars-shield]: https://img.shields.io/github/stars/darideveloper/europeanstartups_scraper.svg?style=for-the-badge
-[stars-url]: https://github.com/darideveloper/europeanstartups_scraper/stargazers
+[stars-url]: https://github.com/darideveloper/facebook-groups-post-bot/stargazers
 [issues-shield]: https://img.shields.io/github/issues/darideveloper/europeanstartups_scraper.svg?style=for-the-badge
-[issues-url]: https://github.com/darideveloper/europeanstartups_scraper/issues
+[issues-url]: https://github.com/darideveloper/facebook-groups-post-bot/issues
 [license-shield]: https://img.shields.io/github/license/darideveloper/europeanstartups_scraper.svg?style=for-the-badge
-[license-url]: https://github.com/darideveloper/europeanstartups_scraper/blob/master/LICENSE.txt
+[license-url]: https://github.com/darideveloper/facebook-groups-post-bot/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/francisco-dari-hernandez-6456b6181/
 [product-screenshot]: ./imgs/screenshot.gif
