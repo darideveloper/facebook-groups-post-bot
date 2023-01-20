@@ -87,6 +87,7 @@ class Scraper (WebScraping):
         """ Sedarch already signed groups and save them in data file """
         
         # Set groups page
+        logger.info ("Searching groups...")
         search_page = f"https://www.facebook.com/groups/search/groups_home/?q={keyword}"
         self.set_page(search_page)
         sleep (3)
@@ -115,7 +116,7 @@ class Scraper (WebScraping):
             
         # Get all link of the groups
         links = self.get_attribs (selectors["group_link"], "href")
-        logger.info (f"{len(links)} groups found")
+        logger.info (f"{len(links)} groups found and saved")
         
         # Save links in jdon file
         if links:
