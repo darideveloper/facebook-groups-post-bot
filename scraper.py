@@ -88,31 +88,30 @@ class Scraper (WebScraping):
         
         # Set groups page
         logger.info ("Searching groups...")
-        search_page = f"https://www.facebook.com/groups/search/groups_home/?q={keyword}"
+        search_page = f"https://www.facebook.com/groups/search/groups/?q={keyword}"
         self.set_page(search_page)
         sleep (3)
         self.refresh_selenium()
         
-        selectors = {
-            "display_groups": 'a[aria-label="See all"]',
-            "group_link": 'div[role="feed"] > div[role="article"] a[aria-label="Visit"]',
-            "group_link_index": 'div[role="feed"] > div[role="article"]:nth-child(index) a[aria-label="Visit"]',
-        }
+        links_num = 0
+        tries_count = 0
         
-        # Display all groups
-        self.click_js(selectors["display_groups"])
-        sleep (3)
-        self.refresh_selenium()
+        selectors = {
+            "group_link": '.x1yztbdb div[role="article"] a[aria-label="Visit"]',
+        }
         
         # Scroll for show already logged groups
         while True:
             self.go_bottom()
-            childs_num = len(self.get_elems (selectors["group_link"]))
-            last_child = str(childs_num - 1)
-            last_link = self.get_attrib (selectors["group_link_index"].replace("index", last_child), "href")
-            if not last_link:
+            new_links_num = len(self.get_elems (selectors["group_link"]))
+            if new_links_num == links_num:
+                tries_count += 1
+            else: 
+                links_num = new_links_num
+                self.refresh_selenium()
+                
+            if tries_count == 3:
                 break
-            self.refresh_selenium()
             
         # Get all link of the groups
         links = self.get_attribs (selectors["group_link"], "href")
