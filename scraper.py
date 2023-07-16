@@ -35,6 +35,8 @@ class Scraper (WebScraping):
             "input": 'div.notranslate._5rpu[role="textbox"]',
             "display_themes": 'div[aria-label="Show Background Options"]',
             "theme": 'div.x1qjc9v5.x78zum5.x1q0g3np.xozqiw3.xcud41i.x139jcc6.x1n2onr6.xl56j7k > div:nth-child(index) > div[aria-pressed="false"]',
+            "show_image_input": '[aria-label="Photo/video"]',
+            "add_image": 'input[type="file"][accept^="image/*"]',
             "submit": 'input[type="submit"]',
         }
 
@@ -47,9 +49,8 @@ class Scraper (WebScraping):
             
             for post in self.json_data["posts"]:
                 
-                # Select random theme
-                random_theme_index = str(random.randrange(2, 10))
-                random_theme = selectors["theme"].replace("index", random_theme_index)
+                post_text = post["text"]
+                post_image = post["image"]
                 
                 # Open text input
                 self.click_js (selectors["display_input"])
@@ -57,25 +58,34 @@ class Scraper (WebScraping):
                 
                 # Write text
                 try:
-                    self.send_data(selectors["input"], post)
+                    self.send_data(selectors["input"], post_text)
                 except:
                     logger.error('Error writing text: "{post}" ({group})')
                     continue
                 
-                # Show themes
-                try:
+                # Add image or theme
+                if post_image:
+                    # Upload image
+                    self.click_js(selectors["show_image_input"])
                     self.refresh_selenium()
-                    self.click_js(selectors["display_themes"])
-                except:
-                    logger.error(f"Error showing themes. Theme skipped: '{post}' ({group})")
+                    self.send_data(selectors["add_image"], post_image)
                 else:
-                    # Select theme
-                    self.refresh_selenium()
-                    self.click_js(random_theme)
+                    
+                    try:
+                        self.refresh_selenium()
+                        self.click_js(selectors["display_themes"])
+                    except:
+                        logger.error(f"Error showing themes. Theme skipped: '{post}' ({group})")
+                    else:
+                        # Select theme
+                        random_theme_index = str(random.randrange(2, 10))
+                        random_theme = selectors["theme"].replace("index", random_theme_index)
+                        self.refresh_selenium()
+                        self.click_js(random_theme)
                 
                 # submit
                 self.click_js(selectors["submit"])
-                sleep (8)
+                sleep (20)
                 
                 # Save register of post
                 posts_done.append ([group, post])
