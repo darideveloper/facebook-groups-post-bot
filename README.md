@@ -69,9 +69,11 @@ Warning: This script is not for spamming groups, is for post in groups where you
 # Settings
 
 Update your chrome path in the `.env` file (note: the chrome path is the folder where chrome data its installed)
-   ```js
-   CHROME_PATH = C:Users<<your-user-name>>AppDataLocalGoogleChromeUser Data
-   ```
+
+```bash
+CHROME_PATH = C:Users<<your-user-name>>AppDataLocalGoogleChromeUser Data
+WAIT_MIN = 5
+```
 
 # Run
 

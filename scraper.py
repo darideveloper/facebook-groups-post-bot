@@ -9,6 +9,7 @@ from scraping_manager.automate import WebScraping
 # Read env vars 
 load_dotenv ()
 CHROME_FOLDER = os.getenv ("CHROME_FOLDER")
+WAIT_MIN = int(os.getenv ("WAIT_MIN"))
 
 class Scraper (WebScraping):
     
@@ -86,7 +87,7 @@ class Scraper (WebScraping):
                 # submit
                 self.refresh_selenium()
                 self.click_js(selectors["submit"])
-                sleep (20)
+                sleep (WAIT_MIN*60)
                 
                 # Save register of post
                 posts_done.append ([group, post])
