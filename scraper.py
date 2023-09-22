@@ -48,52 +48,38 @@ class Scraper (WebScraping):
             sleep (5)
             self.refresh_selenium()
             
-            for post in self.json_data["posts"]:
-                
-                post_text = post["text"]
-                post_image = post["image"]
-                
-                # Open text input
-                self.click_js (selectors["display_input"])
+            # Get random post
+            post = random.choice (self.json_data["posts"])                
+            post_text = post["text"]
+            post_image = post["image"]
+            
+            # Open text input
+            self.click_js (selectors["display_input"])
+            self.refresh_selenium()
+            
+            # Write text
+            try:
+                self.send_data(selectors["input"], post_text)
+            except:
+                logger.error('Error writing text: "{post}" ({group})')
+                continue
+            
+            # Upload image
+            if post_image:
+                self.click_js(selectors["show_image_input"])
                 self.refresh_selenium()
-                
-                # Write text
-                try:
-                    self.send_data(selectors["input"], post_text)
-                except:
-                    logger.error('Error writing text: "{post}" ({group})')
-                    continue
-                
-                # Add image or theme
-                if post_image:
-                    # Upload image
-                    self.click_js(selectors["show_image_input"])
-                    self.refresh_selenium()
-                    self.send_data(selectors["add_image"], post_image)
-                else:
-                    
-                    try:
-                        self.refresh_selenium()
-                        self.click_js(selectors["display_themes"])
-                    except:
-                        logger.error(f"Error showing themes. Theme skipped: '{post}' ({group})")
-                    else:
-                        # Select theme
-                        random_theme_index = str(random.randrange(2, 10))
-                        random_theme = selectors["theme"].replace("index", random_theme_index)
-                        self.refresh_selenium()
-                        self.click_js(random_theme)
-                
-                # submit
-                self.refresh_selenium()
-                self.click_js(selectors["submit"])
-                sleep (WAIT_MIN*60)
-                
-                # Save register of post
-                posts_done.append ([group, post])
-                
-                # Logs
-                logger.info (f'post done: "{post}" ({group})')
+                self.send_data(selectors["add_image"], post_image)
+        
+            # submit
+            self.refresh_selenium()
+            self.click_js(selectors["submit"])
+            sleep (WAIT_MIN*60)
+            
+            # Save register of post
+            posts_done.append ([group, post])
+            
+            # Logs
+            logger.info (f'post done: "{post}" ({group})')
                 
     def save_groups (self, keyword):
         """ Sedarch already signed groups and save them in data file """
