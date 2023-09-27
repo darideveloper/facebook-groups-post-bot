@@ -8,8 +8,12 @@ from scraping_manager.automate import WebScraping
 
 # Read env vars 
 load_dotenv ()
-CHROME_FOLDER = os.getenv ("CHROME_FOLDER")
-WAIT_MIN = int(os.getenv ("WAIT_MIN"))
+CHROME_FOLDER = os.getenv("CHROME_FOLDER")
+WAIT_MIN = int(os.getenv("WAIT_MIN"))
+PROFILE = os.getenv("PROFILE")
+PUBLISH_LABEL = os.getenv("PUBLISH_LABEL")
+VISIT_LABEL = os.getenv("VISIT_LABEL")
+
 
 class Scraper (WebScraping):
     
@@ -25,7 +29,7 @@ class Scraper (WebScraping):
             self.json_data = json.loads (file.read())
 
         # Start scraper
-        super().__init__(chrome_folder=CHROME_FOLDER, start_killing=True)
+        super().__init__(chrome_folder=CHROME_FOLDER, start_killing=True, user_agent=True, profile = PROFILE)
         
     def post_in_groups (self):
         """ Publish each post in each group fromd ata file """
@@ -38,7 +42,7 @@ class Scraper (WebScraping):
             "theme": 'div.x1qjc9v5.x78zum5.x1q0g3np.xozqiw3.xcud41i.x139jcc6.x1n2onr6.xl56j7k > div:nth-child(index) > div[aria-pressed="false"]',
             "show_image_input": '[aria-label="Photo/video"]',
             "add_image": 'input[type="file"][accept^="image/*"]',
-            "submit": '[aria-label="Post"][role="button"]',
+            "submit": f'[aria-label="{PUBLISH_LABEL}"][role="button"]',
         }
 
         # Loop each group
@@ -51,7 +55,9 @@ class Scraper (WebScraping):
             # Get random post
             post = random.choice (self.json_data["posts"])                
             post_text = post["text"]
-            post_image = post["image"]
+            post_image = False
+            if "image" in post :
+                post_image = post["image"]
             
             # Open text input
             self.click_js (selectors["display_input"])
@@ -69,8 +75,15 @@ class Scraper (WebScraping):
                 self.click_js(selectors["show_image_input"])
                 self.refresh_selenium()
                 self.send_data(selectors["add_image"], post_image)
-        
+
+            print(post_text.find('https'))
+            print( post_text.split("https")[0])
+            if post_text.find('https'):
+                #self.set_attrib(selectors["input"], "value", post_text.split("https")[0] )
+                self.clear(selectors["input"])
+                self.send_data(selectors["input"], post_text.split("https")[0])
             # submit
+            
             self.refresh_selenium()
             self.click_js(selectors["submit"])
             sleep (WAIT_MIN*60)
@@ -86,16 +99,15 @@ class Scraper (WebScraping):
         
         # Set groups page
         logger.info ("Searching groups...")
-        search_page = f"https://www.facebook.com/groups/search/groups/?q={keyword}"
+        search_page = f"https://www.facebook.com/groups/search/groups/?q={keyword}&filters=eyJteV9ncm91cHM6MCI6IntcIm5hbWVcIjpcIm15X2dyb3Vwc1wiLFwiYXJnc1wiOlwiXCJ9In0%3D"
         self.set_page(search_page)
         sleep (3)
         self.refresh_selenium()
-        
         links_num = 0
         tries_count = 0
         
         selectors = {
-            "group_link": '.x1yztbdb div[role="article"] a[aria-label="Visit"]',
+            "group_link": f'.x1yztbdb div[role="article"] a[aria-label="{VISIT_LABEL}"]',
         }
         
         # Scroll for show already logged groups
