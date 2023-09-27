@@ -12,3 +12,5 @@ db.*
 *.sqlite3
 *.pyc
 data.json
+Users*
+.DS_Store

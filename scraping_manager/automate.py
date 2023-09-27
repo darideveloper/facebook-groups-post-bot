@@ -22,7 +22,7 @@ class WebScraping ():
                  chrome_folder="", user_agent=False, 
                  download_folder="", extensions=[], incognito=False, experimentals=True,
                  start_killing=False, start_openning:bool=True, width:int=1280, height:int=720,
-                 mute:bool=True):
+                 mute:bool=True, profile = "Default"):
         """ Constructor of the class
 
         Args:
@@ -46,9 +46,9 @@ class WebScraping ():
         """
 
         self.basetime = 1
-
         # variables of class
         self.current_folder = os.path.dirname(__file__)
+        self.__profile__ = profile
         self.__headless__ = headless
         self.__proxy_server__ = proxy_server
         self.__proxy_port__ = proxy_port
@@ -164,11 +164,12 @@ class WebScraping ():
             # Set chrome folder
             if self.__chrome_folder__:
                 WebScraping.options.add_argument(f"--user-data-dir={self.__chrome_folder__}")
+                WebScraping.options.add_argument(f"--profile-directory={self.__profile__}")
 
             # Set default user agent
             if self.__user_agent__:
                 WebScraping.options.add_argument(
-                    '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36')
+                    '--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36')
 
             if self.__download_folder__:
                 prefs = {"download.default_directory": f"{self.__download_folder__}",
@@ -327,6 +328,11 @@ class WebScraping ():
         self.end_browser()
         self.driver = self.get_browser()
         self.driver.get(self.__web_page__)
+
+    def clear(self, selector):
+        elem = self.driver.find_element(By.CSS_SELECTOR, selector)
+        elem.send_keys(Keys.COMMAND, 'a')
+        elem.send_keys(Keys.BACKSPACE)
 
     def send_data(self, selector, data):
         """
