@@ -38,7 +38,7 @@ class Scraper (WebScraping):
             "theme": 'div.x1qjc9v5.x78zum5.x1q0g3np.xozqiw3.xcud41i.x139jcc6.x1n2onr6.xl56j7k > div:nth-child(index) > div[aria-pressed="false"]',
             "show_image_input": '[aria-label="Photo/video"]',
             "add_image": 'input[type="file"][accept^="image/*"]',
-            "submit": '[aria-label="Post"][role="button"]',
+            "submit": '[aria-label="Post"][role="button"], [aria-label="Publicar"][role="button"]',
         }
 
         # Loop each group
