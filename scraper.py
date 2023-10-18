@@ -51,7 +51,7 @@ class Scraper (WebScraping):
             # Get random post
             post = random.choice (self.json_data["posts"])                
             post_text = post["text"]
-            post_image = post["image"]
+            post_image = post.get("image", "")
             
             # Open text input
             self.click_js (selectors["display_input"])
