@@ -603,7 +603,10 @@ class WebScraping ():
         Clase the current tab in the browser
         """
 
-        self.driver.close()
+        try:
+            self.driver.close()
+        except:
+            pass
 
     def switch_to_tab(self, number):
         """

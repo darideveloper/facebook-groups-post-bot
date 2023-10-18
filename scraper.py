@@ -61,7 +61,7 @@ class Scraper (WebScraping):
             try:
                 self.send_data(selectors["input"], post_text)
             except:
-                logger.error('Error writing text: "{post}" ({group})')
+                logger.error(f'Error writing text: "{post}" ({group})')
                 continue
             
             # Upload image
