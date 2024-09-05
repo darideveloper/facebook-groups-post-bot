@@ -34,8 +34,7 @@ class Scraper (WebScraping):
 
         # Css selectors
         selectors = {
-            "display_input": ".x6s0dn4.x78zum5.x1l90r2v.x1pi30zi.x1swvt13.xz9dl7a > "
-                             'pan.x1emribx + div.x1i10hfl',
+            "display_input": 'span + [role="button"]',
             "input": 'div.notranslate._5rpu[role="textbox"]',
             "display_themes": 'div[aria-label="Show Background Options"]',
             "theme": 'div.x1qjc9v5.x78zum5.x1q0g3np.xozqiw3.xcud41i.x139jcc6.x1n2onr6'
@@ -89,7 +88,7 @@ class Scraper (WebScraping):
             posts_done.append([group, post])
 
             # Logs
-            logger.info(f'post done: "{post}" ({group})')
+            logger.info(f'post done: "{post_text}" ({group})')
 
     def save_groups(self, keyword):
         """ Sedarch already signed groups and save them in data file """
@@ -130,4 +129,4 @@ class Scraper (WebScraping):
         if links:
             self.json_data["groups"] = links
             with open(self.data_path, "w", encoding="UTF-8") as file:
-                file.write(json.dumps(self.json_data))
+                file.write(json.dumps(self.json_data, indent=4))
