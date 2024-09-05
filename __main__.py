@@ -3,9 +3,10 @@ from libs.scraper import Scraper
 
 def main():
     
+    scraper = Scraper()
+    
     while True:
         
-        scraper = Scraper()
         option = input("1) Save groups\n2) Post in groups\n3) Exit\nOption: ")
         if option == "1":
             keyword = input("Enter keyword: ")
